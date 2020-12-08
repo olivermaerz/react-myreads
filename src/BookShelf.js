@@ -5,13 +5,14 @@ import Book from "./Book";
 
 class BookShelf extends Component {
     static propTypes = {
-        books: PropTypes.array.isRequired
+        books: PropTypes.array.isRequired,
+        title: PropTypes.string.isRequired,
     }
     render() {
         return (
             <div>
                 <div className="bookshelf">
-                    <h2 className="bookshelf-title">Currently Reading, Want to Read, Read</h2>
+                    <h2 className="bookshelf-title">{this.props.title}</h2>
                     <div className="bookshelf-books">
                         <Book
                             books={this.props.books}

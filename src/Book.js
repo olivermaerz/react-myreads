@@ -13,7 +13,8 @@ class Book extends Component {
                 <li key={book.id}>
                     <div className="book">
                         <div className="book-top">
-                            <div className="book-cover" style={{backgroundImage: 'url("'+book.imageLinks.thumbnail+'")'}}
+                            <div className="book-cover"
+                                 style={{backgroundImage: 'url("'+book.imageLinks.thumbnail+'")'}}
                             />
                             <div className="book-shelf-changer">
                                 <select>

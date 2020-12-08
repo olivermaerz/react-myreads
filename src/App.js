@@ -15,6 +15,12 @@ class BooksApp extends React.Component {
     books: [],
   }
 
+  filterBooks = (filter) => {
+    return this.state.books.filter((book) => (
+        book.shelf === filter
+    ))
+  }
+
   componentDidMount() {
     BooksAPI.getAll()
         .then((books) => {
@@ -25,7 +31,15 @@ class BooksApp extends React.Component {
         })
   }
 
-  render() {
+  render(messageA, messageB) {
+    const reading = this.state.books.filter((book) => (
+        book.shelf.toLowerCase().includes('reading')
+    ))
+
+    const wantToRead = this.filterBooks('wantToRead')
+    const read = this.filterBooks('read')
+    const currentlyReading = this.filterBooks('currentlyReading')
+
     return (
       <div className="app">
         {this.state.showSearchPage ? (
@@ -57,7 +71,16 @@ class BooksApp extends React.Component {
             <div className="list-books-content">
               <div>
                 <BookShelf
-                    books={this.state.books}
+                  books={currentlyReading}
+                  title={'Currently Reading'}
+                />
+                <BookShelf
+                  books={wantToRead}
+                  title={'Want to Read'}
+                />
+                <BookShelf
+                  books={read}
+                  title={'Read'}
                 />
               </div>
             </div>
