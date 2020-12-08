@@ -17,7 +17,7 @@ class Book extends Component {
                                  style={{backgroundImage: 'url("'+book.imageLinks.thumbnail+'")'}}
                             />
                             <div className="book-shelf-changer">
-                                <select>
+                                <select value={book.shelf}>
                                     <option value="move" disabled>Move to...</option>
                                     <option value="currentlyReading">Currently Reading</option>
                                     <option value="wantToRead">Want to Read</option>
@@ -28,7 +28,7 @@ class Book extends Component {
                         </div>
                         <div className="book-title">{book.title}</div>
                         <div className="book-authors">
-
+                            {/* Join authors and separate with a comma */}
                             {book.authors.map((author, i) => <span key={i}>
                                 {i > 0 && ", "}
                                 {author}
