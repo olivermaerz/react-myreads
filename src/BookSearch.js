@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import { Link } from "react-router-dom";
 import Book from "./Book";
 
-class BookShelf extends Component {
+class BookSearch extends Component {
     static propTypes = {
-        books: PropTypes.array.isRequired,
         title: PropTypes.string.isRequired,
+        books: PropTypes.array.isRequired,
     }
+
     render() {
-        console.log(this.props.books)
         return (
             <div>
                 <div className="bookshelf">
@@ -25,4 +25,4 @@ class BookShelf extends Component {
     }
 }
 
-export default BookShelf;
+export default BookSearch;

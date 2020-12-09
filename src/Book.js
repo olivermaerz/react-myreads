@@ -1,10 +1,15 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class Book extends Component {
     static propTypes = {
         books: PropTypes.array.isRequired,
     }
+
+    updateShelf = (newShelf) => {
+        newShelf.shelf = newShelf.shelf
+    }
+
     render() {
         console.log('Props', this.props)
         return (
@@ -17,7 +22,10 @@ class Book extends Component {
                                  style={{backgroundImage: 'url("'+book.imageLinks.thumbnail+'")'}}
                             />
                             <div className="book-shelf-changer">
-                                <select value={book.shelf}>
+                                <select
+                                    value={book.shelf}
+                                    onChange={this.updateShelf}
+                                >
                                     <option value="move" disabled>Move to...</option>
                                     <option value="currentlyReading">Currently Reading</option>
                                     <option value="wantToRead">Want to Read</option>
@@ -29,10 +37,14 @@ class Book extends Component {
                         <div className="book-title">{book.title}</div>
                         <div className="book-authors">
                             {/* Join authors and separate with a comma */}
-                            {book.authors.map((author, i) => <span key={i}>
+                            {(book.authors !== undefined) && (book.authors.length > 0) ? (
+                                (book.authors.map((author, i) => <span key={i}>
                                 {i > 0 && ", "}
                                 {author}
-                            </span>)}
+                            </span>))
+                                ) : (
+                                <span>No Author</span>
+                            ) }
                         </div>
 
                     </div>
@@ -43,4 +55,4 @@ class Book extends Component {
     }
 }
 
-export default Book
+export default Book;
