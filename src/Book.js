@@ -18,9 +18,17 @@ class Book extends Component {
                 <li key={book.id}>
                     <div className="book">
                         <div className="book-top">
-                            <div className="book-cover"
-                                 style={{backgroundImage: 'url("'+book.imageLinks.thumbnail+'")'}}
-                            />
+                            {(book.imageLinks !== undefined) && (book.imageLinks.thumbnail !== undefined) ? (
+                                <div className="book-cover"
+                                     style={{backgroundImage: 'url("'+book.imageLinks.thumbnail+'")'}}
+                                />
+                            ) : (
+                                <div className="book-cover">
+                                    <div className="book-cover-title">
+                                        {book.title}
+                                    </div>
+                                </div>
+                            )}
                             <div className="book-shelf-changer">
                                 <select
                                     value={book.shelf}
