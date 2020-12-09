@@ -1,5 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap');
+
 html, body, .root {
   height: 100%;
+  margin: 0;
+  font-family: 'Roboto Slab', serif;
 }
 
 body {
@@ -14,7 +18,7 @@ body, .app {
 
 .list-books-title {
   padding: 10px 0;
-  background: #2e7c31;
+  background: #26272b;
   text-align: center;
 }
 
@@ -198,3 +202,17 @@ button:active {
   text-align: center;
   font-size: 0.8em;
 }
+
+.search-help-text {
+  color: #999999;
+  padding-left: 50px;
+  padding-right: 50px;
+}
+
+.search-error-text {
+  font-size: 1.25em;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  text-align: center;
+}
+

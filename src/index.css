@@ -1,11 +1,28 @@
 html {
   box-sizing: border-box;
 }
+
 *, *:before, *:after {
   box-sizing: inherit;
 }
+
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Roboto', sans-serif;
+}
+
+#root {
+  min-height: 100%;
+  height: auto !important;
+  margin-bottom: -62px;
+}
+
+.site-footer {
+  background-color:#26272b;
+  padding-top: 12px;
+  height: 50px;
+  font-size:15px;
+  line-height:24px;
+  color:#737373;
+  text-align: center;
 }

@@ -1,9 +1,22 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+/**
+ * Book component to display a single book in the bookshelf component
+ */
 class Book extends Component {
     static propTypes = {
-        books: PropTypes.array.isRequired,
+        book: PropTypes.object.isRequired,
+    }
+
+    state = {
+        book: {},
+    }
+
+    componentDidMount() {
+        this.setState(() =>({
+            book: this.props.book,
+        }))
     }
 
     updateShelf = (newShelf) => {
@@ -11,54 +24,49 @@ class Book extends Component {
     }
 
     render() {
-        console.log('Props', this.props)
+        const { book } = this.props;
         return (
-            <ol className="books-grid">
-            {this.props.books.map((book) => (
-                <li key={book.id}>
-                    <div className="book">
-                        <div className="book-top">
-                            {(book.imageLinks !== undefined) && (book.imageLinks.thumbnail !== undefined) ? (
-                                <div className="book-cover"
-                                     style={{backgroundImage: 'url("'+book.imageLinks.thumbnail+'")'}}
-                                />
-                            ) : (
-                                <div className="book-cover">
-                                    <div className="book-cover-title">
-                                        {book.title}
-                                    </div>
-                                </div>
-                            )}
-                            <div className="book-shelf-changer">
-                                <select
-                                    value={book.shelf}
-                                    onChange={this.updateShelf}
-                                >
-                                    <option value="move" disabled>Move to...</option>
-                                    <option value="currentlyReading">Currently Reading</option>
-                                    <option value="wantToRead">Want to Read</option>
-                                    <option value="read">Read</option>
-                                    <option value="none">None</option>
-                                </select>
+            <div className="book">
+                <div className="book-top">
+                    {(book.imageLinks !== undefined) && (book.imageLinks.thumbnail !== undefined) ? (
+                        <div className="book-cover"
+                             style={{backgroundImage: 'url("'+book.imageLinks.thumbnail+'")'}}
+                        />
+                    ) : (
+                        /* No book thumbnail url found, display the title instead of image */
+                        <div className="book-cover">
+                            <div className="book-cover-title">
+                                {book.title}
                             </div>
                         </div>
-                        <div className="book-title">{book.title}</div>
-                        <div className="book-authors">
-                            {/* Join authors and separate with a comma */}
-                            {(book.authors !== undefined) && (book.authors.length > 0) ? (
-                                (book.authors.map((author, i) => <span key={i}>
-                                {i > 0 && ", "}
-                                {author}
-                            </span>))
-                                ) : (
-                                <span>No Author</span>
-                            ) }
-                        </div>
-
+                    )}
+                    <div className="book-shelf-changer">
+                        {/* display select to move book to other shelf */}
+                        <select
+                            value={book.shelf}
+                            onChange={this.updateShelf}
+                        >
+                            <option value="move" disabled>Move to...</option>
+                            <option value="currentlyReading">Currently Reading</option>
+                            <option value="wantToRead">Want to Read</option>
+                            <option value="read">Read</option>
+                            <option value="none">None</option>
+                        </select>
                     </div>
-                </li>
-            ))}
-            </ol>
+                </div>
+                <div className="book-title">{book.title}</div>
+                <div className="book-authors">
+                    {/* Join authors in string and separate them with commas */}
+                    {(book.authors !== undefined) && (book.authors.length > 0) ? (
+                        (book.authors.map((author, i) => <span key={i}>
+                        {i > 0 && ", "}
+                        {author}
+                    </span>))
+                        ) : (
+                        <span>No Author</span>
+                    ) }
+                </div>
+            </div>
         )
     }
 }
