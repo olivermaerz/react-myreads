@@ -10,14 +10,18 @@ class BooksApp extends React.Component {
         books: [],
     }
 
-    /* method to filter books based on bookshelf type (read, wantToRead ...) */
+    /**
+     *  method to filter books based on bookshelf type (read, wantToRead ...)
+     */
     filterBooks = (filter) => {
         return this.state.books.filter((book) => (
             book.shelf === filter
         ))
     }
 
-    /* Once component has mounted get "all" books via API call */
+    /**
+     *  Once component has mounted get "all" books via API call
+     */
     componentDidMount() {
         BooksAPI.getAll()
             .then((books) => {
@@ -27,8 +31,17 @@ class BooksApp extends React.Component {
             })
     }
 
+    /**
+     * Reload the app page (is called by child components so all shelves get updated)
+     */
+    updatePage = () => {
+        this.forceUpdate();
+    }
 
-
+    /**
+     * Render the app
+     * @returns {JSX.Element}
+     */
     render() {
         /* create three arrays with the books for each of the three bookshelves */
         const wantToRead = this.filterBooks('wantToRead');
@@ -41,7 +54,7 @@ class BooksApp extends React.Component {
 
                 {/* Route for the search page  */}
                 <Route path='/search' render={() => (
-                    <BookSearch />
+                    <BookSearch/>
                 )}/>
 
                 {/* Route for the main page  */}
@@ -55,14 +68,17 @@ class BooksApp extends React.Component {
                                 <BookShelf
                                     books={currentlyReading}
                                     title={'Currently Reading'}
+                                    updatePage={this.updatePage}
                                 />
                                 <BookShelf
                                     books={wantToRead}
                                     title={'Want to Read'}
+                                    updatePage={this.updatePage}
                                 />
                                 <BookShelf
                                     books={read}
                                     title={'Read'}
+                                    updatePage={this.updatePage}
                                 />
                             </div>
                         </div>

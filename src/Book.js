@@ -1,36 +1,59 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
 /**
  * Book component to display a single book in the bookshelf component
  */
 class Book extends Component {
+    /**
+     * Define the props
+     * @type {{updateBookShelf: (function(*, *, *, *, *, *): undefined)|*, book: (function(*, *, *, *, *, *): undefined)|*}}
+     */
     static propTypes = {
         book: PropTypes.object.isRequired,
+        updateBookShelf: PropTypes.func.isRequired,
     }
 
+    /**
+     * Define the state
+     * @type {{book: {}, shelf: string}}
+     */
     state = {
         book: {},
+        shelf: '',
     }
 
+    /**
+     * Once the component has been mounted set the book and shelf state
+     */
     componentDidMount() {
-        this.setState(() =>({
+        this.setState(() => ({
             book: this.props.book,
+            shelf: this.props.book.shelf,
         }))
     }
 
+    /**
+     * Update the shelf by calling paremnt component
+     * @param newShelf
+     */
     updateShelf = (newShelf) => {
-        newShelf.shelf = newShelf.shelf
+        /* call the function in the parent component (bookshelf component) */
+        this.props.updateBookShelf(this.props.book.id, newShelf);
     }
 
+    /**
+     * Render the book component
+     * @returns {JSX.Element}
+     */
     render() {
-        const { book } = this.props;
+        const {book} = this.props;
         return (
             <div className="book">
                 <div className="book-top">
                     {(book.imageLinks !== undefined) && (book.imageLinks.thumbnail !== undefined) ? (
                         <div className="book-cover"
-                             style={{backgroundImage: 'url("'+book.imageLinks.thumbnail+'")'}}
+                             style={{backgroundImage: 'url("' + book.imageLinks.thumbnail + '")'}}
                         />
                     ) : (
                         /* No book thumbnail url found, display the title instead of image */
@@ -43,8 +66,8 @@ class Book extends Component {
                     <div className="book-shelf-changer">
                         {/* display select to move book to other shelf */}
                         <select
-                            value={book.shelf}
-                            onChange={this.updateShelf}
+                            value={this.state.book.shelf}
+                            onChange={(event) => this.updateShelf(event.target.value)}
                         >
                             <option value="move" disabled>Move to...</option>
                             <option value="currentlyReading">Currently Reading</option>
@@ -60,11 +83,11 @@ class Book extends Component {
                     {(book.authors !== undefined) && (book.authors.length > 0) ? (
                         (book.authors.map((author, i) => <span key={i}>
                         {i > 0 && ", "}
-                        {author}
+                            {author}
                     </span>))
-                        ) : (
+                    ) : (
                         <span>No Author</span>
-                    ) }
+                    )}
                 </div>
             </div>
         )

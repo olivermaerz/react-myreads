@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from "react-router-dom";
-import Book from "./Book";
 import BookShelf from "./BookShelf";
 import * as BooksAPI from "./BooksAPI";
 
@@ -17,6 +15,10 @@ class BookSearch extends Component {
         bookSearchResult: [],
     }
 
+    /**
+     * Update the search query
+     * @param query
+     */
     updateQuery = (query) => {
         this.setState(() => ({
             query: query
@@ -30,15 +32,26 @@ class BookSearch extends Component {
             })
     }
 
+    /**
+     * Force an update of the search poge
+     */
+    updatePage = () => {
+        this.forceUpdate();
+    }
+
+    /**
+     * render the search component
+     * @returns {JSX.Element}
+     */
     render() {
         const { query, bookSearchResult } = this.state;
 
         return (
             <div className="search-books">
                 <div className="search-books-bar">
-                    <Link to='/'>
-                        <button className="close-search">Close</button>
-                    </Link>
+
+                    <button className="close-search" onClick={()=>{window.location.href='/'}}>Close</button>
+
                     <div className="search-books-input-wrapper">
                         <input
                             type="text"
@@ -56,6 +69,7 @@ class BookSearch extends Component {
                         <BookShelf
                             title='Search Results:'
                             books={this.state.bookSearchResult}
+                            updatePage={this.updatePage}
                         />
                     ) : (
                         <div>
