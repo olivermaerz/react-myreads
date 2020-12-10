@@ -19,7 +19,6 @@ class Book extends Component {
      * @type {{book: {}, shelf: string}}
      */
     state = {
-        book: {},
         shelf: '',
     }
 
@@ -28,7 +27,6 @@ class Book extends Component {
      */
     componentDidMount() {
         this.setState(() => ({
-            book: this.props.book,
             shelf: this.props.book.shelf || 'none',
         }))
     }
@@ -66,7 +64,7 @@ class Book extends Component {
                     <div className="book-shelf-changer">
                         {/* display select to move book to other shelf */}
                         <select
-                            value={this.state.book.shelf}
+                            value={this.props.book.shelf}
                             defaultValue={'none'}
                             onChange={(event) => this.updateShelf(event.target.value)}
                         >
