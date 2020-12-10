@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import BookShelf from "./BookShelf";
 import * as BooksAPI from "./BooksAPI";
 
@@ -7,12 +6,27 @@ import * as BooksAPI from "./BooksAPI";
  * Component for book search (calls bookshelf component to display results)
  */
 class BookSearch extends Component {
-    static propTypes = {
-        bookSearchResult: PropTypes.array.isRequired,
-    }
     state = {
         query: '',
         bookSearchResult: [],
+    }
+
+    /**
+     * Call API and search for books on remote server
+     */
+    updateSearch = () => {
+        if (this.state.query !== '') {
+            BooksAPI.search(this.state.query)
+                .then((apiResults) => {
+                    this.setState({
+                        bookSearchResult: apiResults,
+                    })
+                })
+        } else {
+            this.setState({
+                bookSearchResult: [],
+            })
+        }
     }
 
     /**
@@ -20,32 +34,21 @@ class BookSearch extends Component {
      * @param query
      */
     updateQuery = (query) => {
-        this.setState(() => ({
-            query: query
-        }))
-
-        BooksAPI.search(query)
-            .then((bookSearchResult) => {
-                this.setState(() => ({
-                    bookSearchResult
-                }))
-            })
+        this.setState({
+            query: query},
+            /* use a callback to wait for this.state.query to be mutated */
+            function() {
+                this.updateSearch();
+            }
+        )
     }
 
-    /**
-     * Force an update of the search poge
-     */
-    updatePage = () => {
-        this.forceUpdate();
-    }
 
     /**
      * render the search component
      * @returns {JSX.Element}
      */
     render() {
-        const { query, bookSearchResult } = this.state;
-
         return (
             <div className="search-books">
                 <div className="search-books-bar">
@@ -57,23 +60,22 @@ class BookSearch extends Component {
                             type="text"
                             className='search-books'
                             placeholder="Search by title or author"
-                            value={query}
+                            value={this.state.query}
                             onChange={(event) =>
                                 this.updateQuery(event.target.value)}
                         />
                     </div>
                 </div>
                 <div className="search-books-results">
-                    {(bookSearchResult !== undefined) &&
-                    (bookSearchResult.length > 0) ? (
+                    {(this.state.bookSearchResult !== undefined) &&
+                    (this.state.bookSearchResult.length > 0) ? (
                         <BookShelf
                             title='Search Results:'
                             books={this.state.bookSearchResult}
-                            updatePage={this.updatePage}
                         />
                     ) : (
                         <div>
-                            {(query.length > 0) &&
+                            {(this.state.query.length > 0) &&
                                 /* No book found, display some message */
                                 <div className='search-error-text'>
                                     Sorry, no books found. Please try a different search.

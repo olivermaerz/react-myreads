@@ -8,6 +8,9 @@ import {Link, Route} from 'react-router-dom';
 class BooksApp extends React.Component {
     state = {
         books: [],
+        wantToRead: [],
+        read: [],
+        currentlyReading: [],
     }
 
     /**
@@ -20,22 +23,34 @@ class BooksApp extends React.Component {
     }
 
     /**
+     * Update the states of the arrays for wantToRead, read, currentlyReading
+     */
+    updateBookStates = () => {
+        this.setState({
+            wantToRead: this.filterBooks('wantToRead'),
+            read: this.filterBooks('read'),
+            currentlyReading: this.filterBooks('currentlyReading'),
+        })
+    }
+
+    /**
      *  Once component has mounted get "all" books via API call
      */
     componentDidMount() {
         BooksAPI.getAll()
             .then((books) => {
-                this.setState(() => ({
-                    books
-                }))
+                this.setState({
+                    books: books,
+                });
+                this.updateBookStates();
             })
     }
 
     /**
-     * Reload the app page (is called by child components so all shelves get updated)
+     * Called by child components so all shelves get updated (arrays for three shelves) after book gets moved around
      */
     updatePage = () => {
-        this.forceUpdate();
+        this.updateBookStates();
     }
 
     /**
@@ -44,9 +59,9 @@ class BooksApp extends React.Component {
      */
     render() {
         /* create three arrays with the books for each of the three bookshelves */
-        const wantToRead = this.filterBooks('wantToRead');
-        const read = this.filterBooks('read');
-        const currentlyReading = this.filterBooks('currentlyReading');
+        //const wantToRead = this.filterBooks('wantToRead');
+        //const read = this.filterBooks('read');
+        //const currentlyReading = this.filterBooks('currentlyReading');
 
 
         return (
@@ -66,17 +81,17 @@ class BooksApp extends React.Component {
                         <div className="list-books-content">
                             <div>
                                 <BookShelf
-                                    books={currentlyReading}
+                                    books={this.state.currentlyReading}
                                     title={'Currently Reading'}
                                     updatePage={this.updatePage}
                                 />
                                 <BookShelf
-                                    books={wantToRead}
+                                    books={this.state.wantToRead}
                                     title={'Want to Read'}
                                     updatePage={this.updatePage}
                                 />
                                 <BookShelf
-                                    books={read}
+                                    books={this.state.read}
                                     title={'Read'}
                                     updatePage={this.updatePage}
                                 />
