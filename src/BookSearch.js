@@ -94,13 +94,11 @@ class BookSearch extends Component {
                                 'Programming', 'React', 'Redux', 'River', 'Robotics', 'Rowling', 'Satire',
                                 'Science Fiction', 'Shakespeare', 'Singh', 'Swimming', 'Tale', 'Thrun', 'Time',
                                 'Tolstoy', 'Travel', 'Ultimate', 'Virtual Reality', 'Web Development', 'iOS'
-
                             </div>
                         </div>
                     )}
                 </div>
             </div>
-
         )
     }
 }
