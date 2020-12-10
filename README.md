@@ -1,6 +1,6 @@
 # MyReads Project
 
-This is a simple web app written in React that manages a library of books. You can search for books and then mark them
+This is a simple web app written with React that manages a library of books. You can search for books and then mark them
 as "Currently Reading", "Want to read", "read", or remove books from your library. For the book search the app uses an
 API provided by Udacity. Please keep in mind that the search terms on the server side are somewhat limited (see search
 terms below).
