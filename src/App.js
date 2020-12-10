@@ -63,13 +63,15 @@ class BooksApp extends React.Component {
         //const read = this.filterBooks('read');
         //const currentlyReading = this.filterBooks('currentlyReading');
 
-
         return (
             <div className="app">
 
                 {/* Route for the search page  */}
                 <Route path='/search' render={() => (
-                    <BookSearch/>
+                    <BookSearch
+                        booksOnShelf={this.state.books}
+                        updatePage={this.updatePage}
+                    />
                 )}/>
 
                 {/* Route for the main page  */}

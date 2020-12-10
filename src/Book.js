@@ -65,7 +65,6 @@ class Book extends Component {
                         {/* display select to move book to other shelf */}
                         <select
                             value={this.props.book.shelf}
-                            defaultValue={'none'}
                             onChange={(event) => this.updateShelf(event.target.value)}
                         >
                             <option value="move" disabled>Move to...</option>

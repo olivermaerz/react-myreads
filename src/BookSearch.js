@@ -1,14 +1,45 @@
 import React, { Component } from 'react';
 import BookShelf from "./BookShelf";
 import * as BooksAPI from "./BooksAPI";
+import PropTypes from "prop-types";
 
 /**
  * Component for book search (calls bookshelf component to display results)
  */
 class BookSearch extends Component {
+    static propTypes = {
+        booksOnShelf: PropTypes.array.isRequired,
+        updatePage: PropTypes.func.isRequired,
+    }
+
     state = {
         query: '',
         bookSearchResult: [],
+    }
+
+    /**
+     * As the API does not return the shelf a book is on for search we
+     * need to map the shelf with the data from the books on the three
+     * bookshelves
+     */
+    getShelves = () => {
+        const newBookResult = this.state.bookSearchResult.map((book) => {
+            /* first find the index of the book we are mapping on the array of the books we have on the three shelves */
+            const bookIndexOnShelf = this.props.booksOnShelf.findIndex((bookOnShelf) => bookOnShelf.id === book.id);
+            /* now check if the book was found on our three shelves */
+            if(bookIndexOnShelf >= 0) {
+                /* book has been found -> update the shelf of the book from the search */
+                book.shelf = this.props.booksOnShelf[bookIndexOnShelf].shelf;
+            } else {
+                /* book has not been found (book is not on one of the three shelves) -> set shelf to 'none' */
+                book.shelf = 'none';
+            }
+            return book;
+        })
+        /* finally update the state */
+        this.setState({
+            bookSearchResult: newBookResult,
+        })
     }
 
     /**
@@ -21,6 +52,10 @@ class BookSearch extends Component {
                     this.setState({
                         bookSearchResult: apiResults,
                     })
+                    console.log(apiResults);
+                    this.getShelves()
+                    console.log(this.state.bookSearchResult);
+
                 })
         } else {
             this.setState({
@@ -43,7 +78,6 @@ class BookSearch extends Component {
         )
     }
 
-
     /**
      * render the search component
      * @returns {JSX.Element}
@@ -52,7 +86,20 @@ class BookSearch extends Component {
         return (
             <div className="search-books">
                 <div className="search-books-bar">
+                    {/*
+                        The following code using <Link... provides bad user experience:
 
+                        <Link to='/'>
+                            <button className="close-search">Close</button>
+                        </Link>
+
+                        Clicking on the button brings the user back to the main page, but loading it from the
+                        browser cache (at least for Firefox). Thus if any books have been added to the shelves
+                        on the search page then they will not visible until a reload of the page.
+
+                        The following code however triggers a refresh of the page and recently added books are
+                        immediately shown:
+                    */}
                     <button className="close-search" onClick={()=>{window.location.href='/'}}>Close</button>
 
                     <div className="search-books-input-wrapper">
@@ -72,6 +119,7 @@ class BookSearch extends Component {
                         <BookShelf
                             title='Search Results:'
                             books={this.state.bookSearchResult}
+                            updatePage={this.props.updatePage}
                         />
                     ) : (
                         <div>
