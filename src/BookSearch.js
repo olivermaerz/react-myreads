@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import BookShelf from "./BookShelf";
 import * as BooksAPI from "./BooksAPI";
 import PropTypes from "prop-types";
+import {Link} from "react-router-dom";
 
 /**
  * Component for book search (calls bookshelf component to display results)
@@ -9,7 +10,7 @@ import PropTypes from "prop-types";
 class BookSearch extends Component {
     static propTypes = {
         booksOnShelf: PropTypes.array.isRequired,
-        updatePage: PropTypes.func.isRequired,
+        updateBookShelf: PropTypes.func.isRequired,
     }
 
     state = {
@@ -23,13 +24,14 @@ class BookSearch extends Component {
      * bookshelves
      */
     getShelves = () => {
+        const {booksOnShelf} = this.props;
         const newBookResult = this.state.bookSearchResult.map((book) => {
             /* first find the index of the book we are mapping on the array of the books we have on the three shelves */
-            const bookIndexOnShelf = this.props.booksOnShelf.findIndex((bookOnShelf) => bookOnShelf.id === book.id);
+            const bookIndexOnShelf = booksOnShelf.findIndex((bookOnShelf) => bookOnShelf.id === book.id);
             /* now check if the book was found on our three shelves */
-            if(bookIndexOnShelf >= 0) {
+            if (bookIndexOnShelf >= 0) {
                 /* book has been found -> update the shelf of the book from the search */
-                book.shelf = this.props.booksOnShelf[bookIndexOnShelf].shelf;
+                book.shelf = booksOnShelf[bookIndexOnShelf].shelf;
             } else {
                 /* book has not been found (book is not on one of the three shelves) -> set shelf to 'none' */
                 book.shelf = 'none';
@@ -41,6 +43,7 @@ class BookSearch extends Component {
             bookSearchResult: newBookResult,
         })
     }
+
 
     /**
      * Call API and search for books on remote server
@@ -71,13 +74,13 @@ class BookSearch extends Component {
      */
     updateQuery = (query) => {
         this.setState({
-            query: query},
+                query: query
+            },
             /* use a callback to wait for this.state.query to be mutated */
-            function() {
-                this.updateSearch();
-            }
+            this.updateSearch
         )
     }
+
 
     /**
      * render the search component
@@ -87,21 +90,9 @@ class BookSearch extends Component {
         return (
             <div className="search-books">
                 <div className="search-books-bar">
-                    {/*
-                        The following code using <Link... provides bad user experience:
-
-                        <Link to='/'>
-                            <button className="close-search">Close</button>
-                        </Link>
-
-                        Clicking on the button brings the user back to the main page, but loading it from the
-                        browser cache (at least for Firefox). Thus if any books have been added to the shelves
-                        on the search page then they will not visible until a reload of the page.
-
-                        The following code however triggers a refresh of the page and recently added books are
-                        immediately shown:
-                    */}
-                    <button className="close-search" onClick={()=>{window.location.href='/'}}>Close</button>
+                    <Link to='/'>
+                        <button className="close-search">Close</button>
+                    </Link>
 
                     <div className="search-books-input-wrapper">
                         <input
@@ -120,15 +111,15 @@ class BookSearch extends Component {
                         <BookShelf
                             title='Search Results:'
                             books={this.state.bookSearchResult}
-                            updatePage={this.props.updatePage}
+                            updateBookShelf={this.props.updateBookShelf}
                         />
                     ) : (
                         <div>
                             {(this.state.query.length > 0) &&
-                                /* No book found, display some message */
-                                <div className='search-error-text'>
-                                    Sorry, no books found. Please try a different search.
-                                </div>
+                            /* No book found, display some message */
+                            <div className='search-error-text'>
+                                Sorry, no books found. Please try a different search.
+                            </div>
                             }
                             {/* No query entered yet, or no books found, display possible search terms */}
                             <div className='search-help-text'>

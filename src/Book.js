@@ -31,14 +31,6 @@ class Book extends Component {
         }))
     }
 
-    /**
-     * Update the shelf by calling paremnt component
-     * @param newShelf
-     */
-    updateShelf = (newShelf) => {
-        /* call the function in the parent component (bookshelf component) */
-        this.props.updateBookShelf(this.props.book.id, newShelf);
-    }
 
     /**
      * Render the book component
@@ -64,8 +56,9 @@ class Book extends Component {
                     <div className="book-shelf-changer">
                         {/* display select to move book to other shelf */}
                         <select
-                            value={this.props.book.shelf}
-                            onChange={(event) => this.updateShelf(event.target.value)}
+                            value={book.shelf}
+                            onChange={(event) =>
+                                this.props.updateBookShelf(book, event.target.value)}
                         >
                             <option value="move" disabled>Move to...</option>
                             <option value="currentlyReading">Currently Reading</option>
