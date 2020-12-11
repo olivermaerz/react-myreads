@@ -52,10 +52,11 @@ class BookSearch extends Component {
                     this.setState({
                         bookSearchResult: apiResults,
                     })
-                    console.log(apiResults);
-                    this.getShelves()
-                    console.log(this.state.bookSearchResult);
-
+                    /* Check if the search return 1 or more results ... */
+                    if (apiResults.length > 0) {
+                        /* ... and then lookup if any of those books are already on one of the threes shelf */
+                        this.getShelves()
+                    }
                 })
         } else {
             this.setState({
